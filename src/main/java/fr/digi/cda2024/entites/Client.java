@@ -38,11 +38,14 @@ public class Client implements Serializable {
     )
     private Set<Compte> comptes;
 
+    {
+        this.comptes = new HashSet<>();
+    }
+
     /**
      * Constructeur vide
      */
     public Client() {
-        this.comptes = new HashSet<>();
     }
 
     /**
@@ -61,12 +64,10 @@ public class Client implements Serializable {
      * @param prenom prénom
      * @param dateDeNaissance date de naissance
      * @param adresse adresse
+     * @param banque banque
      */
-    public Client(String nom, String prenom, LocalDate dateDeNaissance, Adresse adresse) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.dateDeNaissance = dateDeNaissance;
-        this.adresse = adresse;
+    public Client(String nom, String prenom, LocalDate dateDeNaissance, Adresse adresse, Banque banque) {
+        this(nom, prenom, dateDeNaissance, adresse, banque, new HashSet<>());
     }
 
     /**
@@ -83,7 +84,7 @@ public class Client implements Serializable {
         this.prenom = prenom;
         this.dateDeNaissance = dateDeNaissance;
         this.adresse = adresse;
-        this.banque = banque;
+        this.setBanque(banque);
         this.comptes = comptes;
     }
 
@@ -189,11 +190,23 @@ public class Client implements Serializable {
         return banque;
     }
 
-    /** Setter
+    /** Setter (bidirectionnel car gère la relation avec Banque)
      * @param banque banque
      */
     public void setBanque(Banque banque) {
+        // Si le client a déjà une banque, on retire le client
+        // de la liste des clients de cette banque :
+        // 1 client n'a qu'une banque
+        if (this.banque != null) {
+            this.banque.getClients().remove(this);
+        }
+
         this.banque = banque;
+
+        // On ajoute le client à la liste des clients de la nouvelle banque
+        if (this.banque != null) {
+            this.banque.getClients().add(this);
+        }
     }
 
     /** Getter

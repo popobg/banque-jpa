@@ -12,7 +12,7 @@ public class Operation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int Id;
-
+    
     @Column(name="montant", nullable = false)
     protected double montant;
 

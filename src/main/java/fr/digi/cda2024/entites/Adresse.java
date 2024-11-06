@@ -2,10 +2,11 @@ package fr.digi.cda2024.entites;
 
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class Adresse {
+public class Adresse implements Serializable {
     private int numero;
     private String rue;
     private int codePostal;

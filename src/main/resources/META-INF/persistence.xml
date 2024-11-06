@@ -16,7 +16,7 @@
             <!-- ne crée que les nouvelles tables après chaque redémarrage-->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
 
-<!--            <property name="hibernate.show_sql" value="true"/>-->
+            <!-- <property name="hibernate.show_sql" value="true"/>-->
             <property name="hibernate.format_sql" value="true"/>
         </properties>
 

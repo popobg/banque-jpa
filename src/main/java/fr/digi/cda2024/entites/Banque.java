@@ -17,14 +17,19 @@ public class Banque implements Serializable {
     @Column(name = "nom")
     private String nom;
 
-    @OneToMany(mappedBy = "banque")
+    // cascade : modifications apportées à Banque s'applique à Client
+    @OneToMany(mappedBy = "banque", cascade = CascadeType.ALL)
     private Set<Client> clients;
+
+    // bloc d'initilisation : évite de répéter ce code dans plusieurs constructeurs
+    {
+        this.clients = new HashSet<>();
+    }
 
     /**
      * Constructeur vide
      */
     public Banque() {
-        this.clients = new HashSet<>();
     }
 
     /**
@@ -64,6 +69,15 @@ public class Banque implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(Id, nom);
+    }
+
+    /**
+     * Ajoute un client à la liste des clients de la banque,
+     * et ajoute une banque rattachée au client (bidirectionnel).
+     * @param client nouveau client de la banque
+     */
+    public void addClient(Client client) {
+        client.setBanque(this);
     }
 
     /** Getter

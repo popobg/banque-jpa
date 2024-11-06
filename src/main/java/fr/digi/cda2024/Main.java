@@ -4,10 +4,12 @@ import fr.digi.cda2024.entites.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Main {
@@ -16,25 +18,32 @@ public class Main {
         Adresse adresse1 = new Adresse(3, "rue du Môme", 31300, "Toulouse");
 
         Banque banquePop = new Banque("Banque Pop");
+        Banque BNP = new Banque("BNP");
 
         Compte compte = new Compte("1248805A", 2_000);
         LivretA livretA = new LivretA("12300A47", 12_000, 1.2);
         AssuranceVie assVie = new AssuranceVie("350000BB", 30_000, 3, LocalDate.of(2030, 9, 1));
 
         Set<Compte> comptesEmmanuel = new HashSet<>();
-        Collections.addAll(comptesEmmanuel, livretA);
+        Collections.addAll(comptesEmmanuel, livretA, compte);
         Set<Compte> comptesElisabeth = new HashSet<>();
-        comptesElisabeth.add(assVie);
+        Collections.addAll(comptesElisabeth, assVie, compte);
 
-        Operation operation = new Operation(124.5, "Assurance", assVie);
-        Virement virement = new Virement(18.9, "Remboursement", compte, "Marie");
-        compte.addOperation(virement);
-        assVie.addOperation(operation);
+        Operation operation1 = new Operation(124.5, "Assurance", assVie);
+        Operation operation2 = new Operation(5, "Cotisation", assVie);
+        Virement virement1 = new Virement(18.9, "Remboursement", compte, "Marie");
+        Virement virement2 = new Virement(69.9, "Chaussures", compte, "La Halle");
+        compte.addOperation(virement1);
+        compte.addOperation(operation2);
+        assVie.addOperation(operation1);
+        assVie.addOperation(virement2);
 
         Client client1 = new Client("Georges", "Emmanuel", LocalDate.of(1963, 12, 18), adresse1, banquePop, comptesEmmanuel);
         Client client2 = new Client("Georges", "Elisabeth", LocalDate.of(1966, 02, 20), adresse1, banquePop, comptesElisabeth);
+        client2.setBanque(BNP);
 
         compte.addClient(client1);
+        compte.addClient(client2);
         livretA.addClient(client1);
         assVie.addClient(client2);
 
@@ -43,25 +52,33 @@ public class Main {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
 
+        // config dans banque permet de persister les clients directement
         em.persist(banquePop);
+        em.persist(BNP);
         em.persist(compte);
         em.persist(livretA);
         em.persist(assVie);
-        em.persist(operation);
-        em.persist(virement);
-        em.persist(client1);
-        em.persist(client2);
+        em.persist(operation1);
+        em.persist(operation2);
+        em.persist(virement1);
+        em.persist(virement2);
 
         Client clientRecherche = em.find(Client.class, 1);
 
         if (clientRecherche != null) {
+            System.out.println("Client d'Id = 1 :");
             System.out.println(clientRecherche);
+            System.out.println();
         }
 
-        LivretA livretARecherche = (LivretA) em.find(Compte.class, 2);
+        TypedQuery<Compte> queryComptes = em.createQuery("from Compte c where c.solde > 3000", Compte.class);
+        List<Compte> comptes = queryComptes.getResultList();
 
-        if (livretARecherche != null) {
-            System.out.println(livretARecherche);
+        if (comptes != null) {
+            System.out.println("Comptes dont le solde est supérieur à 3000 :");
+            for(Compte c: comptes) {
+                System.out.println(c);
+            }
         }
 
         em.getTransaction().commit();

@@ -15,7 +15,7 @@ public class Compte implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int Id;
 
-    @Column(name = "numero", nullable = false)
+    @Column(name = "numero", length = 10, nullable = false)
     protected String numero;
 
     @Column(name = "solde", nullable = false)
@@ -27,12 +27,15 @@ public class Compte implements Serializable {
     @ManyToMany(mappedBy = "comptes")
     protected Set<Client> clients;
 
+    {
+        this.operations = new HashSet<>();
+        this.clients = new HashSet<>();
+    }
+
     /**
      * Constructeur vide
      */
     public Compte() {
-        this.operations = new HashSet<>();
-        this.clients = new HashSet<>();
     }
 
     /**
