@@ -2,6 +2,7 @@ package fr.digi.cda2024.entites;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -9,7 +10,7 @@ import java.util.Set;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Compte")
-public class Compte {
+public class Compte implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int Id;

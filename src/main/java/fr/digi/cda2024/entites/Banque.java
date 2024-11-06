@@ -2,13 +2,14 @@ package fr.digi.cda2024.entites;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "Banque")
-public class Banque {
+public class Banque implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;

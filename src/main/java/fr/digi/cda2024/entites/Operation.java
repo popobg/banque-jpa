@@ -2,12 +2,13 @@ package fr.digi.cda2024.entites;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Operation")
-public class Operation {
+public class Operation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int Id;

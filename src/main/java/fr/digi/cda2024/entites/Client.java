@@ -2,6 +2,7 @@ package fr.digi.cda2024.entites;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
@@ -9,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Client")
-public class Client {
+public class Client implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
