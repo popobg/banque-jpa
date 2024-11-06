@@ -105,10 +105,18 @@ public class Operation implements Serializable {
         return compte;
     }
 
-    /** Setter
+    /** Setter (bidirectionnel)
      * @param compte compte
      */
     public void setCompte(Compte compte) {
+        if (this.compte != null) {
+            this.compte.getOperations().remove(this);
+        }
+
         this.compte = compte;
+
+        if (this.compte != null) {
+            this.compte.getOperations().add(this);
+        }
     }
 }

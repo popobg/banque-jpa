@@ -31,7 +31,7 @@ public class Client implements Serializable {
     @JoinColumn(name = "Id_banque")
     private Banque banque;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "client_compte",
     joinColumns = @JoinColumn(name = "Id_client", referencedColumnName = "Id"),
     inverseJoinColumns = @JoinColumn(name = "Id_compte", referencedColumnName = "Id")

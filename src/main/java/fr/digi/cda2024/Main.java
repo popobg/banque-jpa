@@ -36,7 +36,7 @@ public class Main {
         compte.addOperation(virement1);
         compte.addOperation(operation2);
         assVie.addOperation(operation1);
-        assVie.addOperation(virement2);
+        livretA.addOperation(virement2);
 
         Client client1 = new Client("Georges", "Emmanuel", LocalDate.of(1963, 12, 18), adresse1, banquePop, comptesEmmanuel);
         Client client2 = new Client("Georges", "Elisabeth", LocalDate.of(1966, 02, 20), adresse1, banquePop, comptesElisabeth);
@@ -52,16 +52,11 @@ public class Main {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
 
-        // config dans banque permet de persister les clients directement
+        // config cascade dans banque : permet de persister les clients directement
+        // config cascade dans client : permet de persister les comptes
+        // config cascade dans compte : permet de persister les opérations
         em.persist(banquePop);
         em.persist(BNP);
-        em.persist(compte);
-        em.persist(livretA);
-        em.persist(assVie);
-        em.persist(operation1);
-        em.persist(operation2);
-        em.persist(virement1);
-        em.persist(virement2);
 
         Client clientRecherche = em.find(Client.class, 1);
 
@@ -77,6 +72,17 @@ public class Main {
         if (comptes != null) {
             System.out.println("Comptes dont le solde est supérieur à 3000 :");
             for(Compte c: comptes) {
+                System.out.println(c);
+            }
+            System.out.println();
+        }
+
+        TypedQuery<Compte> queryComptesOpe = em.createQuery("select c from Compte c JOIN c.operations o WHERE o.montant > 20", Compte.class);
+        List<Compte> comptesOpe = queryComptesOpe.getResultList();
+
+        if (comptesOpe != null) {
+            System.out.println("Les comptes dont au moins une opération est supérieure à 20€ sont :");
+            for (Compte c: comptesOpe) {
                 System.out.println(c);
             }
         }

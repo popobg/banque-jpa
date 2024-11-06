@@ -21,7 +21,7 @@ public class Compte implements Serializable {
     @Column(name = "solde", nullable = false)
     protected double solde;
 
-    @OneToMany(mappedBy = "compte")
+    @OneToMany(mappedBy = "compte", cascade = CascadeType.ALL)
     protected Set<Operation> operations;
 
     @ManyToMany(mappedBy = "comptes")
@@ -73,11 +73,12 @@ public class Compte implements Serializable {
     }
 
     /**
-     * Ajoute une nouvelle opération au set des opérations du client.
+     * Ajoute une nouvelle opération au set des opérations du client,
+     * et ajoute l'opération rattachée au compte (bidirectionnel).
      * @param operation opération
      */
     public void addOperation(Operation operation) {
-        this.operations.add(operation);
+        operation.setCompte(this);
     }
 
     /**
