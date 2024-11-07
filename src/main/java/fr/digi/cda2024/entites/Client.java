@@ -114,10 +114,26 @@ public class Client implements Serializable {
 
     /**
      * Ajouter un nouveau compte appartenant au client.
+     * + ajoute le client actuel à la liste des clients du compte.
      * @param compte compte
      */
     public void addCompte(Compte compte) {
-        this.comptes.add(compte);
+        if (compte != null) {
+            this.comptes.add(compte);
+            compte.getClients().add(this);
+        }
+    }
+
+    /**
+     * Retirer un compte appartenant à un client
+     * + supprime le client actuel de la liste des clients du compte.
+     * @param compte compte
+     */
+    public void removeCompte(Compte compte) {
+        if (compte != null) {
+            this.comptes.remove(compte);
+            compte.getClients().remove(this);
+        }
     }
 
     /** Getter

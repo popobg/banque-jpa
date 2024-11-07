@@ -9,7 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "Virement")
 public class Virement extends Operation {
-    @Column(name = "beneficiaire")
+    @Column(name = "beneficiaire", nullable = false)
     private String beneficiaire;
 
     /**

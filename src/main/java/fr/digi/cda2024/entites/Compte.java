@@ -73,20 +73,43 @@ public class Compte implements Serializable {
     }
 
     /**
-     * Ajoute une nouvelle opération au set des opérations du client,
-     * et ajoute l'opération rattachée au compte (bidirectionnel).
+     * Ajoute une nouvelle opération au set des opérations du compte
+     * + ajoute le compte actuel à l'opération (bidirectionnel).
      * @param operation opération
      */
     public void addOperation(Operation operation) {
-        operation.setCompte(this);
+        operation.addCompte(this);
     }
 
     /**
-     * Ajoute un nouveau client gestionnaire du compte.
+     * Retire une opération du set des opérations du compte
+     * + retire ce compte de l'opération.
+     * @param operation opération
+     */
+    public void removeOperation (Operation operation) {
+        operation.removeCompte(this);
+    }
+
+    /**
+     * Ajoute un nouveau client gestionnaire du compte
+     * + ajoute le compte à la liste des comptes du client.
      * @param client client
      */
     public void addClient(Client client) {
-        this.clients.add(client);
+        if (client != null) {
+            client.addCompte(this);
+        }
+    }
+
+    /**
+     * Retire un client rattaché au compte
+     * + retire le compte de la liste des comptes du client.
+     * @param client client
+     */
+    public void removeClient(Client client) {
+        if (client != null) {
+            client.removeCompte(this);
+        }
     }
 
     /** Getter

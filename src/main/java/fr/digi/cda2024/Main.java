@@ -70,7 +70,7 @@ public class Main {
         List<Compte> comptes = queryComptes.getResultList();
 
         if (comptes != null) {
-            System.out.println("Comptes dont le solde est supérieur à 3000 :");
+            System.out.println("Comptes dont le solde est supérieur à 3000€ :");
             for(Compte c: comptes) {
                 System.out.println(c);
             }

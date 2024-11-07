@@ -63,6 +63,34 @@ public class Operation implements Serializable {
         return Objects.hash(Id, montant, motif, compte);
     }
 
+    /** Ajoute un compte rattache à l'opération
+     * + ajoute l'opération à la liste des opérations du compte.
+     * @param compte compte
+     */
+    public void addCompte(Compte compte) {
+        if (this.compte != null) {
+            this.compte.getOperations().remove(this);
+        }
+
+        this.compte = compte;
+
+        if (this.compte != null) {
+            this.compte.getOperations().add(this);
+        }
+    }
+
+    /** Retire le compte rattaché à l'opération
+     * + retire l'opération de la liste des opérations du compte.
+     * @param compte compte
+     */
+    public void removeCompte(Compte compte) {
+        if (this.compte != null) {
+            this.compte.getOperations().remove(this);
+            this.compte = null;
+        }
+    }
+
+
     /** Getter
      * @return Id
      */
@@ -103,20 +131,5 @@ public class Operation implements Serializable {
      */
     public Compte getCompte() {
         return compte;
-    }
-
-    /** Setter (bidirectionnel)
-     * @param compte compte
-     */
-    public void setCompte(Compte compte) {
-        if (this.compte != null) {
-            this.compte.getOperations().remove(this);
-        }
-
-        this.compte = compte;
-
-        if (this.compte != null) {
-            this.compte.getOperations().add(this);
-        }
     }
 }
